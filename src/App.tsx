@@ -1,14 +1,20 @@
-import { Button } from "./components/ui/button";
+import { Route, Routes } from "react-router-dom";
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import Complier from "./pages/Complier";
+import NotFound from "./pages/NotFound";
+import { ThemeProvider } from "@/components/theme-provider";
 
 function App() {
   return (
-    <>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis magnam
-      reprehenderit beatae ea in recusandae, ipsa ipsum? Fugit accusantium earum
-      dolorem, laborum magni illum itaque nostrum, sunt quidem reprehenderit
-      quibusdam.
-      <Button>Test</Button>
-    </>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/compiler" element={<Complier />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </ThemeProvider>
   );
 }
 
