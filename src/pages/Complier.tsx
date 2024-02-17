@@ -1,4 +1,5 @@
 import CodeEditor from "@/components/CodeEditor";
+import RenderCode from "@/components/RenderCode";
 import SubHeader from "@/components/SubHeader";
 import {
   ResizableHandle,
@@ -21,7 +22,7 @@ function Complier() {
         className="h-[calc(100dvh-60px)] min-w-[650px]"
         defaultSize={60}
       >
-        compiler
+        <RenderCode />
       </ResizablePanel>
     </ResizablePanelGroup>
   );
