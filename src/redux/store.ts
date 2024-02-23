@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import compilerSlice from "./slices/compilerSlice";
+import userSlice from "./slices/userSlice";
 
 export const store = configureStore({
     reducer: {
-        compilerReducer: compilerSlice
+        compilerReducer: compilerSlice,
+        userReducer: userSlice
     },
 });
 
