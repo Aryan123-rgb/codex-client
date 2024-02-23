@@ -6,10 +6,12 @@ import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "@/components/theme-provider";
 import Login from "./pages/Login";
 import Signup from "./pages/SignUp";
+import { Toaster } from "./components/ui/toaster";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Toaster />
       <Header />
       <Routes>
         <Route path="/login" element={<Login />} />

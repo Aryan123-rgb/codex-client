@@ -12,17 +12,27 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useSignupMutation } from "@/redux/slices/api";
+import { useToast } from "@/components/ui/use-toast";
+import { updateCurrentUser, updateIsLoggedIn } from "@/redux/slices/userSlice";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 const formSchema = z.object({
-  username: z.string(),
+  username: z.string().min(2).max(50),
   email: z.string().email(),
-  password: z.string(),
+  password: z
+    .string()
+    .min(2, {
+      message: "Username must be at least 2 characters.",
+    })
+    .max(50),
 });
 
-export default function Signup() {
+itexport default function Signup() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  //   const [signup, { isLoading }] = useSignupMutation();
+  const { toast } = useToast();
+  const [signup, { isLoading }] = useSignupMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,12 +44,19 @@ export default function Signup() {
 
   async function handleSignup(values: z.infer<typeof formSchema>) {
     try {
-      console.log(values);
-      //   const response = await signup(values).unwrap();
-      //   dispatch(updateCurrentUser(response));
-      //   dispatch(updateIsLoggedIn(true));
+      const response = await signup(values).unwrap();
+      dispatch(updateCurrentUser(response.data));
+      dispatch(updateIsLoggedIn(true));
       //   navigate("/");
-    } catch (error) {
+      toast({
+        title: response.message,
+        variant: "success",
+      });
+    } catch (error: any) {
+      toast({
+        title: error.data.message,
+        variant: "destructive",
+      });
       console.log(error);
     }
   }
@@ -47,7 +64,9 @@ export default function Signup() {
     <div className="__signup grid-bg w-full h-[calc(100dvh-60px)] flex justify-center items-center flex-col gap-3">
       <div className="__form_container bg-black border-[1px] py-8 px-8 flex flex-col gap-5 w-[400px]">
         <div className="">
-          <h1 className="font-mono text-5xl font-bold text-left mb-2">Signup</h1>
+          <h1 className="font-mono text-5xl font-bold text-left mb-2">
+            Signup
+          </h1>
           <p className=" font-mono text-xl">
             Join the community of expert frontend developers🧑‍💻.
           </p>
@@ -63,10 +82,7 @@ export default function Signup() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      placeholder="Username"
-                      {...field}
-                    />
+                    <Input placeholder="Username" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -78,11 +94,7 @@ export default function Signup() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="Email"
-                      {...field}
-                    />
+                    <Input type="email" placeholder="Email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -94,19 +106,22 @@ export default function Signup() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Password"
-                      {...field}
-                    />
+                    <Input type="password" placeholder="Password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
-              Signup
-            </Button>
+            {isLoading ? (
+              <Button disabled>
+                <ReloadIcong className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </Button>
+            ) : (
+              <Button className="w-full" type="submit">
+                Signup
+              </Button>
+            )}
           </form>
         </Form>
         <small className="text-xs font-mono">

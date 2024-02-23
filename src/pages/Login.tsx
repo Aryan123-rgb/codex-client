@@ -1,4 +1,3 @@
-// import "./pageStyles/grid.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -12,8 +11,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
-// import { useLoginMutation } from "@/redux/slices/api";
 import { useDispatch } from "react-redux";
+import { useLoginMutation } from "@/redux/slices/api";
+import { useToast } from "@/components/ui/use-toast";
+import { updateCurrentUser, updateIsLoggedIn } from "@/redux/slices/userSlice";
+import { ReloadIcon } from "@radix-ui/react-icons";
 // import { updateCurrentUser, updateIsLoggedIn } from "@/redux/slices/appSlice";
 
 const formSchema = z.object({
@@ -22,9 +24,10 @@ const formSchema = z.object({
 });
 
 export default function Login() {
-  //   const [login, { isLoading }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,12 +38,19 @@ export default function Login() {
 
   async function handleLogin(values: z.infer<typeof formSchema>) {
     try {
-      console.log(values);
-      //   const response = await login(values).unwrap();
-      //   dispatch(updateCurrentUser(response));
-      //   dispatch(updateIsLoggedIn(true));
+      const response = await login(values).unwrap();
+      dispatch(updateCurrentUser(response.data));
+      dispatch(updateIsLoggedIn(true));
       //   navigate("/");
-    } catch (error) {
+      toast({
+        title: response.message,
+        variant: "success",
+      });
+    } catch (error: any) {
+      toast({
+        title: error.data.message,
+        variant: "destructive",
+      });
       console.log(error);
     }
   }
@@ -65,7 +75,7 @@ export default function Login() {
                   <FormControl>
                     <Input
                       required
-                      //   disabled={isLoading}
+                      disabled={isLoading}
                       placeholder="Email"
                       {...field}
                     />
@@ -82,7 +92,7 @@ export default function Login() {
                   <FormControl>
                     <Input
                       required
-                      //   disabled={isLoading}
+                      disabled={isLoading}
                       type="password"
                       placeholder="Password"
                       {...field}
@@ -92,9 +102,16 @@ export default function Login() {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
-              Login
-            </Button>
+            {isLoading ? (
+              <Button disabled>
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </Button>
+            ) : (
+              <Button className="w-full" type="submit">
+                Login
+              </Button>
+            )}
           </form>
         </Form>
         <small className="text-xs font-mono">
