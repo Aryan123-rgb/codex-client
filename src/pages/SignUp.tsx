@@ -28,7 +28,7 @@ const formSchema = z.object({
     .max(50),
 });
 
-itexport default function Signup() {
+export default function Signup() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -114,7 +114,7 @@ itexport default function Signup() {
             />
             {isLoading ? (
               <Button disabled>
-                <ReloadIcong className="mr-2 h-4 w-4 animate-spin" />
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                 Please wait
               </Button>
             ) : (

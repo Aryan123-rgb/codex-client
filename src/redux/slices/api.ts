@@ -8,6 +8,13 @@ export const api = createApi({
   }),
   //   tagTypes: ["myCodes", "allCodes"],
   endpoints: (builder) => ({
+    createNewRepl: builder.mutation<codeInfoType, any>({
+      query: (body) => ({
+        url: "/code/create-new-repl",
+        method: "POST",
+        body: body,
+      }),
+    }),
     //     saveCode: builder.mutation<{ url: string; status: string }, codeType>({
     //       query: (fullCode) => {
     //         return {
@@ -18,16 +25,11 @@ export const api = createApi({
     //       },
     //       invalidatesTags: ["myCodes", "allCodes"],
     //     }),
-    //     loadCode: builder.mutation<
-    //       { fullCode: CompilerSliceStateType["fullCode"]; isOwner: boolean },
-    //       { urlId: string }
-    //     >({
-    //       query: (body) => ({
-    //         url: "/compiler/load",
-    //         method: "POST",
-    //         body: body,
-    //       }),
-    //     }),
+    loadCode: builder.query<any, string>({
+      query: (id) => ({
+        url: `/code/load/${id}`,
+      }),
+    }),
     login: builder.mutation<userInfoType, loginCredentialsType>({
       query: (body) => ({
         url: "/user/login",
@@ -43,15 +45,15 @@ export const api = createApi({
         body: body,
       }),
     }),
-    //     logout: builder.mutation<void, void>({
-    //       query: () => ({
-    //         url: "/user/logout",
-    //         method: "POST",
-    //       }),
-    //     }),
-    //     getUserDetails: builder.query<userInfoType, void>({
-    //       query: () => ({ url: "/user/user-details", cache: "no-store" }),
-    //     }),
+    logout: builder.mutation<{ error: boolean; message: string }, void>({
+      query: () => ({
+        url: "/user/logout",
+        method: "POST",
+      }),
+    }),
+    getUserDetails: builder.query<userInfoType, void>({
+      query: () => ({ url: "/user/user-details", cache: "no-store" }),
+    }),
     //     getMyCodes: builder.query<Array<codeType>, void>({
     //       query: () => "/user/my-codes",
     //       providesTags: ["myCodes"],
@@ -89,11 +91,12 @@ export const api = createApi({
 });
 
 export const {
+  useCreateNewReplMutation,
   //   useSaveCodeMutation,
-  //   useLoadCodeMutation,
+  useLoadCodeQuery,
   useLoginMutation,
-  //   useLogoutMutation,
-  //   useGetUserDetailsQuery,
+  useLogoutMutation,
+  useGetUserDetailsQuery,
   useSignupMutation,
   //   useGetMyCodesQuery,
   //   useDeleteCodeMutation,

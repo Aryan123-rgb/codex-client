@@ -4,10 +4,20 @@ interface userInfoType {
     error: boolean;
     message: string,
     data: {
+        userId?: string;
         username: string;
         picture: string;
         email: string;
         savedCodes: Array<string>;
+    }
+}
+
+interface codeInfoType {
+    error: boolean;
+    message: string,
+    data: {
+        replId?: string;
+        title?: string;
     }
 }
 

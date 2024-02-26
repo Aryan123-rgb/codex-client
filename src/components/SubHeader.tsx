@@ -10,15 +10,54 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   CompilerSliceStateType,
+  updateCodeOutput,
   updateCurrentLanguage,
 } from "@/redux/slices/compilerSlice";
 import { RootState } from "@/redux/store";
+import { useParams } from "react-router-dom";
+import { useLoadCodeQuery } from "@/redux/slices/api";
+import { useEffect } from "react";
 
 function SubHeader() {
   const dispatch = useDispatch();
-  const currentLanguage = useSelector(
-    (state: RootState) => state.compilerReducer.currentLanguage
+  const { currentLanguage, fullCode } = useSelector(
+    (state: RootState) => state.compilerReducer
   );
+  const id = useParams().id as string;
+  const { data } = useLoadCodeQuery(id);
+  const language = data?.repl?.language;
+
+  useEffect(() => {
+    if (language === "Python") {
+      dispatch(updateCurrentLanguage("python"));
+    }
+  }, [language, data]);
+
+  const compilePythonCode = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:4000/code/compile-python-code",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ code: fullCode.python }),
+        }
+      );
+
+      if (!response.ok) {
+        console.log(`HTTP error! Status: ${response.status}`);
+        return;
+      }
+      const responseData = await response.json();
+      console.log(responseData);
+      dispatch(updateCodeOutput(responseData));
+    } catch (error) {
+      console.log("Error during fetch:", error);
+      // Handle the error as needed
+    }
+  };
 
   return (
     <div className="_helper_header h-[50px] bg-black text-white p-2 flex justify-between items-center">
@@ -26,6 +65,7 @@ function SubHeader() {
         <Button
           className="flex justify-center items-center gap-1"
           variant="success"
+          onClick={compilePythonCode}
         >
           <Save /> Save
         </Button>
@@ -49,9 +89,18 @@ function SubHeader() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="html">HTML</SelectItem>
-            <SelectItem value="css">CSS</SelectItem>
-            <SelectItem value="javascript">Javascript</SelectItem>
+            {language == "Python" ? (
+              <SelectItem value="python">Python</SelectItem>
+            ) : language === "Javascript" ? (
+              <SelectItem value="javascript">Javascript</SelectItem>
+            ) : (
+              <>
+                {" "}
+                <SelectItem value="html">HTML</SelectItem>
+                <SelectItem value="css">CSS</SelectItem>
+                <SelectItem value="javascript">Javascript</SelectItem>
+              </>
+            )}
           </SelectContent>
         </Select>
       </div>

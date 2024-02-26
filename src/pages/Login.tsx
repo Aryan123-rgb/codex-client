@@ -41,7 +41,7 @@ export default function Login() {
       const response = await login(values).unwrap();
       dispatch(updateCurrentUser(response.data));
       dispatch(updateIsLoggedIn(true));
-      //   navigate("/");
+        navigate("/");
       toast({
         title: response.message,
         variant: "success",

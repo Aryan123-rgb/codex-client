@@ -5,8 +5,10 @@ export interface CompilerSliceStateType {
         html: string;
         css: string;
         javascript: string;
+        python?: string
     };
-    currentLanguage: "html" | "css" | "javascript";
+    currentLanguage: "html" | "css" | "javascript" | 'python';
+    codeOutput: string
 }
 
 const initialState: CompilerSliceStateType = {
@@ -62,8 +64,10 @@ if (taskInput.value !== '') {
     }
 }
       `,
+        python: `print(2+3)`
     },
     currentLanguage: "javascript",
+    codeOutput: ''
 };
 
 
@@ -86,9 +90,12 @@ const compilerSlice = createSlice({
         ) => {
             state.fullCode = action.payload;
         },
+        updateCodeOutput: (state, action) => {
+            state.codeOutput = action.payload
+        }
     },
 });
 
 export default compilerSlice.reducer
-export const { updateCurrentLanguage, updateCodeValue, updateFullCode } =
+export const { updateCurrentLanguage, updateCodeValue, updateFullCode, updateCodeOutput } =
     compilerSlice.actions;

@@ -17,7 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<Home />} />
-        <Route path="/compiler" element={<Complier />} />
+        <Route path="/compiler/:id" element={<Complier />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </ThemeProvider>
