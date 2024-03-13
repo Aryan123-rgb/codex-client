@@ -11,11 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   CompilerSliceStateType,
   updateCodeOutput,
+  updateCodeValue,
   updateCurrentLanguage,
 } from "@/redux/slices/compilerSlice";
 import { RootState } from "@/redux/store";
 import { useParams } from "react-router-dom";
-import { useLoadCodeQuery } from "@/redux/slices/api";
+import { useLoadCodeQuery, useSaveCodeMutation } from "@/redux/slices/api";
 import { useEffect } from "react";
 
 function SubHeader() {
@@ -25,17 +26,23 @@ function SubHeader() {
   );
   const id = useParams().id as string;
   const { data } = useLoadCodeQuery(id);
-  // console.log(data);
+  const [saveCode] = useSaveCodeMutation();
+  console.log(data);
 
   const language = data?.data.language;
+  const code = data?.data.code;
 
   useEffect(() => {
     if (language === "Python") {
       dispatch(updateCurrentLanguage("python"));
+
+      if (code) {
+        dispatch(updateCodeValue(code.python));
+      }
     }
   }, [language, data]);
 
-  const compilePythonCode = async () => {
+  async function compilePythonCode() {
     try {
       const response = await fetch(
         "http://localhost:4000/code/compile-python-code",
@@ -53,13 +60,15 @@ function SubHeader() {
         return;
       }
       const responseData = await response.json();
-      console.log(responseData);
       dispatch(updateCodeOutput(responseData));
+
+      const savedCodeResponse = await saveCode({ fullCode, id }).unwrap();
+      console.log(savedCodeResponse);
     } catch (error) {
       console.log("Error during fetch:", error);
       // Handle the error as needed
     }
-  };
+  }
 
   return (
     <div className="_helper_header h-[50px] bg-black text-white p-2 flex justify-between items-center">

@@ -15,16 +15,17 @@ export const api = createApi({
         body: body,
       }),
     }),
-    //     saveCode: builder.mutation<{ url: string; status: string }, codeType>({
-    //       query: (fullCode) => {
-    //         return {
-    //           url: "/compiler/save",
-    //           method: "POST",
-    //           body: fullCode,
-    //         };
-    //       },
-    //       invalidatesTags: ["myCodes", "allCodes"],
-    //     }),
+    saveCode: builder.mutation<any, any>({
+      query: ({ fullCode, id }) => {
+        console.log("fullCode", fullCode)
+        return {
+          url: `/code/save/${id}`,
+          method: "POST",
+          body: { fullCode },
+        };
+      },
+    }),
+
     loadCode: builder.query<codeInfoType, string>({
       query: (id) => ({
         url: `/code/load/${id}`,
@@ -88,7 +89,7 @@ export const api = createApi({
 
 export const {
   useCreateNewReplMutation,
-  //   useSaveCodeMutation,
+  useSaveCodeMutation,
   useLoadCodeQuery,
   useLoginMutation,
   useLogoutMutation,

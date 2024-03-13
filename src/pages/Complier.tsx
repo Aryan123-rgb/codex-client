@@ -11,7 +11,7 @@ function Complier() {
   return (
     <ResizablePanelGroup direction="horizontal" className="">
       <ResizablePanel
-        defaultSize={40}
+        defaultSize={50}
         className="h-[calc(100dvh-60px)] min-w-[350px]"
       >
         <SubHeader />
@@ -20,7 +20,7 @@ function Complier() {
       <ResizableHandle />
       <ResizablePanel
         className="h-[calc(100dvh-60px)] min-w-[650px]"
-        defaultSize={60}
+        defaultSize={50}
       >
         <RenderCode />
       </ResizablePanel>

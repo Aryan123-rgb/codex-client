@@ -25,6 +25,12 @@ interface codeArrayType {
 }
 
 interface codeResponseData {
+    code?: {
+        html: string;
+        css: string;
+        javascript: string;
+        python: string;
+    }
     createdAt: string;
     language: string;
     title: string;
