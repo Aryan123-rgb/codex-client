@@ -61,7 +61,7 @@ function Header() {
       {isLoggedIn ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Avatar className="mr-2">
+            <Avatar className="mr-2 cursor-pointer">
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
@@ -75,7 +75,7 @@ function Header() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/my-saved-codes")}>
                 My Saved Codes
                 <DropdownMenuShortcut>&lt;&gt;</DropdownMenuShortcut>
               </DropdownMenuItem>

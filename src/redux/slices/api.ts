@@ -25,7 +25,7 @@ export const api = createApi({
     //       },
     //       invalidatesTags: ["myCodes", "allCodes"],
     //     }),
-    loadCode: builder.query<any, string>({
+    loadCode: builder.query<codeInfoType, string>({
       query: (id) => ({
         url: `/code/load/${id}`,
       }),
@@ -77,16 +77,12 @@ export const api = createApi({
     //         };
     //       },
     //     }),
-    //     getAllCodes: builder.query<
-    //       Array<{ _id: string; title: string; ownerName: string }>,
-    //       void
-    //     >({
-    //       query: () => ({
-    //         url: "/compiler/get-all-codes",
-    //         cache: "no-store",
-    //       }),
-    //       providesTags: ["allCodes"],
-    //     }),
+    getAllCodes: builder.query<codeArrayType, void>({
+      query: () => ({
+        url: "/code/get-all-codes",
+        cache: "no-store",
+      }),
+    }),
   }),
 });
 
@@ -100,6 +96,6 @@ export const {
   useSignupMutation,
   //   useGetMyCodesQuery,
   //   useDeleteCodeMutation,
-  //   useEditCodeMutation,
-  //   useGetAllCodesQuery,
+  // useEditCodeMutation,
+  useGetAllCodesQuery,
 } = api;

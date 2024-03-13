@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Login from "./pages/Login";
 import Signup from "./pages/SignUp";
 import { Toaster } from "./components/ui/toaster";
+import MySavedCodes from "./pages/MySavedCodes";
 
 function App() {
   return (
@@ -16,8 +17,9 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/my-saved-codes" element={<MySavedCodes />} />
         <Route path="/" element={<Home />} />
-        <Route path="/compiler/:id" element={<Complier />} />
+        <Route path="/my-saved-codes/:id" element={<Complier />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </ThemeProvider>

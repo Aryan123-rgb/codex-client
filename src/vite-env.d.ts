@@ -15,10 +15,24 @@ interface userInfoType {
 interface codeInfoType {
     error: boolean;
     message: string,
-    data: {
-        replId?: string;
-        title?: string;
-    }
+    data: codeResponseData
+}
+
+interface codeArrayType {
+    error: boolean;
+    message: string;
+    data: ApiResponseData[];
+}
+
+interface codeResponseData {
+    createdAt: string;
+    language: string;
+    title: string;
+    updatedAt: string;
+    userId: string;
+    userName: string;
+    __v: number;
+    _id: string;
 }
 
 interface loginCredentialsType {

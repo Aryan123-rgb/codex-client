@@ -62,8 +62,7 @@ export default function Home() {
       return;
     }
     const response = await createNewRepl({ language, title }).unwrap();
-    navigate(`/compiler/${response.data.replId}`);
-    console.log(response);
+    navigate(`/my-saved-codes/${response.data._id}`);
   };
   return (
     <div className="w-full h-[calc(100vh-60px)] text-white flex justify-center items-center flex-col gap-3">

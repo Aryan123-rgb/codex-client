@@ -25,7 +25,9 @@ function SubHeader() {
   );
   const id = useParams().id as string;
   const { data } = useLoadCodeQuery(id);
-  const language = data?.repl?.language;
+  // console.log(data);
+
+  const language = data?.data.language;
 
   useEffect(() => {
     if (language === "Python") {
@@ -76,7 +78,7 @@ function SubHeader() {
       <div className="flex justify-center items-center gap-1">
         <p>Language: </p>
         <Select
-          defaultValue={currentLanguage}
+          value={currentLanguage}
           onValueChange={(value) =>
             dispatch(
               updateCurrentLanguage(

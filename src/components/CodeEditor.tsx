@@ -4,7 +4,7 @@ import { tags as t } from "@lezer/highlight";
 import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 import { draculaInit } from "@uiw/codemirror-theme-dracula";
 import CodeMirror from "@uiw/react-codemirror";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 function CodeEditor() {
@@ -20,9 +20,6 @@ function CodeEditor() {
   const onChange = useCallback((val: string) => {
     dispatch(updateCodeValue(val));
   }, []);
-
-  useEffect(() => {
-  }, [currentLanguage, fullCode]);
 
   return (
     <CodeMirror

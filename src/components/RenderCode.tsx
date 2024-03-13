@@ -19,6 +19,7 @@ export default function RenderCode() {
       {currentLanguage === "python" ? (
         <div
           className="bg-black text-white h-full p-5"
+          style={{ whiteSpace: "pre" }}
           dangerouslySetInnerHTML={{ __html: formattedCodeOutput }}
         />
       ) : (
