@@ -38,7 +38,7 @@ function MySavedCodes() {
   return (
     <div className="p-8">
       <h1 className="text-4xl mb-4">My Saved Codes</h1>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-6">
         {codesData?.length ? (
           codesData.map((code, index) => {
             const matchingTech = techData.find(

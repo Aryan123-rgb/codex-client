@@ -16,7 +16,7 @@ export default function RenderCode() {
 
   return (
     <div className="bg-white h-[calc(100dvh-60px)]">
-      {currentLanguage === "python" ? (
+      {currentLanguage === "python" || currentLanguage == "javascript" ? (
         <div
           className="bg-black text-white h-full p-5"
           style={{ whiteSpace: "pre" }}

@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:4000",
+    baseUrl: import.meta.env.VITE_BACKEND_BASE_URL,
     credentials: "include",
   }),
   //   tagTypes: ["myCodes", "allCodes"],
@@ -17,7 +17,6 @@ export const api = createApi({
     }),
     saveCode: builder.mutation<any, any>({
       query: ({ fullCode, id }) => {
-        console.log("fullCode", fullCode)
         return {
           url: `/code/save/${id}`,
           method: "POST",
@@ -55,29 +54,16 @@ export const api = createApi({
     getUserDetails: builder.query<userInfoType, void>({
       query: () => ({ url: "/user/user-details", cache: "no-store" }),
     }),
-    //     getMyCodes: builder.query<Array<codeType>, void>({
-    //       query: () => "/user/my-codes",
-    //       providesTags: ["myCodes"],
-    //     }),
-    //     deleteCode: builder.mutation<void, string>({
-    //       query: (_id) => ({
-    //         url: `/compiler/delete/${_id}`,
-    //         method: "DELETE",
-    //       }),
-    //       invalidatesTags: ["myCodes","allCodes"],
-    //     }),
-    //     editCode: builder.mutation<
-    //       void,
-    //       { fullCode: CompilerSliceStateType["fullCode"]; id: string }
-    //     >({
-    //       query: ({ fullCode, id }) => {
-    //         return {
-    //           url: `/compiler/edit/${id}`,
-    //           method: "PUT",
-    //           body: fullCode,
-    //         };
-    //       },
-    //     }),
+    compileCode: builder.mutation<string, any>({
+      query: ({ code, currentLanguage }) => {
+        return {
+          url: `code/compile-${currentLanguage}-code`,
+          method: "POST",
+          body: { code },
+        }
+      },
+
+    }),
     getAllCodes: builder.query<codeArrayType, void>({
       query: () => ({
         url: "/code/get-all-codes",
@@ -95,8 +81,6 @@ export const {
   useLogoutMutation,
   useGetUserDetailsQuery,
   useSignupMutation,
-  //   useGetMyCodesQuery,
-  //   useDeleteCodeMutation,
-  // useEditCodeMutation,
   useGetAllCodesQuery,
+  useCompileCodeMutation
 } = api;

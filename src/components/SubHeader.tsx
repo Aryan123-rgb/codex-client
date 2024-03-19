@@ -16,21 +16,26 @@ import {
 } from "@/redux/slices/compilerSlice";
 import { RootState } from "@/redux/store";
 import { useParams } from "react-router-dom";
-import { useLoadCodeQuery, useSaveCodeMutation } from "@/redux/slices/api";
+import {
+  useCompileCodeMutation,
+  useLoadCodeQuery,
+  useSaveCodeMutation,
+} from "@/redux/slices/api";
 import { useEffect } from "react";
 
 function SubHeader() {
   const dispatch = useDispatch();
+  const [compileCode] = useCompileCodeMutation();
   const { currentLanguage, fullCode } = useSelector(
     (state: RootState) => state.compilerReducer
   );
   const id = useParams().id as string;
   const { data } = useLoadCodeQuery(id);
   const [saveCode] = useSaveCodeMutation();
-  console.log(data);
 
   const language = data?.data.language;
   const code = data?.data.code;
+  console.log(code);
 
   useEffect(() => {
     if (language === "Python") {
@@ -40,33 +45,28 @@ function SubHeader() {
         dispatch(updateCodeValue(code.python));
       }
     }
+
+    if (language === "Javascript") {
+      dispatch(updateCurrentLanguage("javascript"));
+
+      if (code) {
+        dispatch(updateCodeValue(code.javascript));
+      }
+    }
   }, [language, data]);
 
-  async function compilePythonCode() {
+  async function compileAndSaveCode() {
     try {
-      const response = await fetch(
-        "http://localhost:4000/code/compile-python-code",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ code: fullCode.python }),
-        }
-      );
+      const codeResponse = await compileCode({
+        code: fullCode[currentLanguage],
+        currentLanguage,
+      }).unwrap();
 
-      if (!response.ok) {
-        console.log(`HTTP error! Status: ${response.status}`);
-        return;
-      }
-      const responseData = await response.json();
-      dispatch(updateCodeOutput(responseData));
-
-      const savedCodeResponse = await saveCode({ fullCode, id }).unwrap();
-      console.log(savedCodeResponse);
+      dispatch(updateCodeOutput(codeResponse));
+      console.log(fullCode);
+      await saveCode({ fullCode, id }).unwrap();
     } catch (error) {
       console.log("Error during fetch:", error);
-      // Handle the error as needed
     }
   }
 
@@ -76,7 +76,7 @@ function SubHeader() {
         <Button
           className="flex justify-center items-center gap-1"
           variant="success"
-          onClick={compilePythonCode}
+          onClick={compileAndSaveCode}
         >
           <Save /> Save
         </Button>
@@ -100,13 +100,16 @@ function SubHeader() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {language == "Python" ? (
+            {language === "Python" ? (
               <SelectItem value="python">Python</SelectItem>
             ) : language === "Javascript" ? (
               <SelectItem value="javascript">Javascript</SelectItem>
+            ) : language === "C++" ? (
+              <SelectItem value="cpp">C++</SelectItem>
+            ) : language === "Java" ? (
+              <SelectItem value="java">Java</SelectItem>
             ) : (
               <>
-                {" "}
                 <SelectItem value="html">HTML</SelectItem>
                 <SelectItem value="css">CSS</SelectItem>
                 <SelectItem value="javascript">Javascript</SelectItem>
