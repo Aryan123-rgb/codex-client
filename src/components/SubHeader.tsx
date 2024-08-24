@@ -78,7 +78,7 @@ function SubHeader() {
           variant="success"
           onClick={compileAndSaveCode}
         >
-          <Save /> Save
+          <Save /> Save/Compile
         </Button>
         <Button className="flex justify-center items-center gap-1">
           <Share2 /> Share
